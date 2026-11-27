@@ -1,0 +1,79 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Student Management System</h2>
+
+<p>
+    Logged in as: {{ current_user.email }}
+</p>
+
+<p>
+    Your Role: <strong>{{ current_user.role|upper }}</strong>
+</p>
+
+<hr>
+
+{% if current_user.role == 'admin' %}
+
+    <h3>Add New Student</h3>
+
+    <form method="POST" action="{{ url_for('add_student') }}">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+        >
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+        >
+
+        <button type="submit">Add Student</button>
+
+    </form>
+
+{% else %}
+
+    <p>You are a viewer. You can only view student records.</p>
+
+{% endif %}
+
+<hr>
+
+<h3>Student List</h3>
+
+{% if students %}
+
+    <ul>
+        {% for student in students %}
+
+            <li>
+                {{ student.full_name }}
+                ({{ student.email }})
+
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('delete_student', id=student.id) }}">
+                        Delete
+                    </a>
+                {% endif %}
+
+            </li>
+
+        {% endfor %}
+    </ul>
+
+{% else %}
+
+    <p>No student records available.</p>
+
+{% endif %}
+
+{% endblock %}
+
