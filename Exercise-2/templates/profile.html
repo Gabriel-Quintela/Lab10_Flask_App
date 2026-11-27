@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>My Profile</h2>
+
+{% if user.image_filename %}
+    <img
+        src="{{ url_for('static', filename='uploads/' + user.image_filename) }}"
+        alt="Profile Picture"
+        width="150"
+        height="150"
+        style="object-fit: cover; border-radius: 50%;"
+    >
+{% else %}
+    <p>No profile picture uploaded yet.</p>
+{% endif %}
+
+<p><strong>Email:</strong> {{ user.email }}</p>
+
+<p>
+    <strong>Display Name:</strong>
+    {{ user.display_name or 'Not set' }}
+</p>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <label>Display Name:</label><br>
+    <input
+        type="text"
+        name="display_name"
+        value="{{ user.display_name or '' }}"
+        required
+    >
+
+    <br><br>
+
+    <label>Upload Profile Picture:</label><br>
+    <input
+        type="file"
+        name="profile_picture"
+        accept=".jpg,.jpeg,.png"
+    >
+
+    <br><br>
+
+    <button type="submit">Update Profile</button>
+
+</form>
+
+{% endblock %}
